@@ -1,43 +1,41 @@
 <!doctype html>
 <html lang="ja">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>自己紹介ページ</title>
-  </head>
-  <body>
+</head>
+
+<body>
     <!-- ============================================
          実習2: 基本的なHTMLページ
          まずは以下のh1とpを自分の内容に書き換えてみよう
     ============================================ -->
-    <h1>はじめてのWebページ</h1>
-    <p>HTMLの勉強を始めました！</p>
+    <header>
+        <h1>はじめてのWebページ</h1>
+        <p>HTMLの勉強を始めました！</p>
+    </header>
 
-    <!-- ============================================
-         実習3: 自己紹介ページを作ろう
-         以下のTODOコメントに従って、内容を追加してください
-    ============================================ -->
+    <main>
+        <section>
+            <h1>田中太郎の自己紹介</h1>
+            <p>理工学部の3年生です。</p>
+        </section>
 
-    <!-- TODO: h1タグで自分の名前を見出しとして書いてみよう -->
-    <!-- 例: <h1>山田太郎の自己紹介</h1> -->
+        <h2>趣味</h2>
+        <section>
+            <ul>
+                <li>読書</li>
+                <li>釣り</li>
+                <li>天体観測</li>
+            </ul>
 
-    <!-- TODO: pタグで自己紹介文を2〜3文書いてみよう -->
-    <!-- 例: <p>情報学部の1年生です。</p> -->
+        <h2>おすすめのサイト</h2>
+            <a href="https://www.youtube.com/">YouTube</a>
+        </section>
 
-    <!-- TODO: h2タグで「趣味」という見出しを作ろう -->
-
-    <!-- TODO: ul と li タグで趣味のリストを3つ以上書いてみよう -->
-    <!-- 例:
-    <ul>
-        <li>プログラミング</li>
-        <li>読書</li>
-    </ul>
-    -->
-
-    <!-- TODO: h2タグで「好きなサイト」という見出しを作ろう -->
-
-    <!-- TODO: aタグで好きなWebサイトへのリンクを1つ以上作ろう -->
-    <!-- 例: <a href="https://github.com">GitHub</a> -->
+    </main>
 
     <!-- ============================================
          実習4: セマンティックタグで構造化しよう
@@ -71,6 +69,23 @@
          以下のTODOに従って、フォームを作成してください
     ============================================ -->
 
+
+    <section>
+        <h2>お問い合わせ</h2>
+        <form>
+            <label for="name">名前:</label>
+            <input type="text" id="name" placeholder="田中太郎">
+            <label for="email">メール:</label>
+            <input type="email" id="email" placeholder="sample@mail.mail">
+            <button type="submit">送信</button>
+<br>           
+            <input type="checkbox" id="task1">
+            <label for="task1">タスク1を完了</label>
+<br>
+            <input type="checkbox" id="task2" checked>
+            <label for="task2">タスク2を完了（初期状態でチェック済み）</label>
+        </form>
+    </section>
     <!-- TODO: sectionタグで「お問い合わせ」セクションを作ろう -->
     <!-- TODO: formタグの中に以下を作成:
          1. 名前の入力欄（type="text"）+ labelタグ
@@ -89,5 +104,6 @@
         </form>
     </section>
     -->
-  </body>
+</body>
+
 </html>

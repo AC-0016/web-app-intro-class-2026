@@ -27,15 +27,44 @@
     <!-- ===== ヘッダー ===== -->
     <header>
       <!-- ヒント: h1タグでアプリのタイトルを書こう -->
-    </header>
+       <h1>TODOアプリ</h1>
 
     <!-- ===== メインコンテンツ ===== -->
     <main>
+
+      <input type="text" id="name" placeholder="新しいTODOを入力">
+      <button type="submit">追加</button>
       <!-- ----- TODO入力エリア ----- -->
       <!-- ヒント: form (id="todo-form") タグの中に以下を追加
          - input (type="text", id="todo-input", placeholder="新しいTODOを入力...")
          - button (type="submit", テキスト: "追加")
+ 
     -->
+
+            <section>
+<section>
+    <ul>
+        <li>
+            <input type="checkbox" id="task1">
+            <label for="task1">釣りに行く</label>
+             <button type="submit">削除</button>
+        </li>
+
+        <li>
+            <input type="checkbox" id="task2">
+            <label for="task2">天体観測をする</label>
+            <button type="submit">削除</button>
+        </li>
+
+        <li>
+            <input type="checkbox" id="task3">
+            <label for="task2">宿題をする</label>
+            <button type="submit">削除</button>
+        </li>
+    </ul>
+</section>
+            </ul>
+        </section>
 
       <!-- ----- TODOリスト表示エリア ----- -->
       <!-- ヒント: ul (id="todo-list") の中に li を3つ以上追加
