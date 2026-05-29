@@ -659,7 +659,7 @@ cursor.execute("INSERT INTO todos (title, done) VALUES (?, 0)", (todo.title,))
    python main.py
    ```
 
-5. ブラウザで `http://localhost:8000/todos` を開いてデータを確認
+5. ブラウザで `/todos` を開いてデータを確認
 
 ---
 
