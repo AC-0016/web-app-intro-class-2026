@@ -107,40 +107,40 @@ function renderTodos(todos) {
     //   createElement + textContent に書き換えてください。
     //
     //   修正後（第7回と同じ構造）:
-    //     const label = document.createElement("label");
-    //     label.className = "todo-label";
-    //
-    //     const checkbox = document.createElement("input");
-    //     checkbox.type = "checkbox";
-    //     checkbox.className = "todo-checkbox";
-    //     checkbox.checked = todo.done;
-    //     checkbox.addEventListener("change", () => toggleTodo(todo.id, todo.done));
-    //
-    //     const titleSpan = document.createElement("span");
-    //     titleSpan.className = "todo-title";
-    //     titleSpan.textContent = todo.title;
-    //
-    //     label.appendChild(checkbox);
-    //     label.appendChild(titleSpan);
-    //
-    //     const deleteBtn = document.createElement("button");
-    //     deleteBtn.className = "delete-button";
-    //     deleteBtn.textContent = "削除";
-    //     deleteBtn.addEventListener("click", () => deleteTodo(todo.id));
-    //
-    //     li.appendChild(label);
-    //     li.appendChild(deleteBtn);
+         const label = document.createElement("label");
+         label.className = "todo-label";
+    
+         const checkbox = document.createElement("input");
+         checkbox.type = "checkbox";
+         checkbox.className = "todo-checkbox";
+         checkbox.checked = todo.done;
+         checkbox.addEventListener("change", () => toggleTodo(todo.id, todo.done));
+    
+         const titleSpan = document.createElement("span");
+         titleSpan.className = "todo-title";
+         titleSpan.textContent = todo.title;
+    
+         label.appendChild(checkbox);
+         label.appendChild(titleSpan);
+    
+         const deleteBtn = document.createElement("button");
+         deleteBtn.className = "delete-button";
+         deleteBtn.textContent = "削除";
+         deleteBtn.addEventListener("click", () => deleteTodo(todo.id));
+    
+         li.appendChild(label);
+         li.appendChild(deleteBtn);
 
     // 危険！ innerHTML を使用（XSS脆弱性あり）
-    li.innerHTML = `
-      <label class="todo-label">
-        <input type="checkbox" class="todo-checkbox"
-          ${todo.done ? "checked" : ""}
-          onchange="toggleTodo(${todo.id}, ${todo.done})">
-        <span class="todo-title">${todo.title}</span>
-      </label>
-      <button class="delete-button" onclick="deleteTodo(${todo.id})">削除</button>
-    `;
+//    li.innerHTML = `
+//      <label class="todo-label">
+//        <input type="checkbox" class="todo-checkbox"
+//          ${todo.done ? "checked" : ""}
+//          onchange="toggleTodo(${todo.id}, ${todo.done})">
+//        <span class="todo-title">${todo.title}</span>
+//      </label>
+//      <button class="delete-button" onclick="deleteTodo(${todo.id})">削除</button>
+//    `;
 
     list.appendChild(li);
   });
