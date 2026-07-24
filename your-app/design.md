@@ -5,13 +5,13 @@
 
 ## 2. テーブル設計
 テーブル名：　Logbook
-カラム:　id(項目) / date(日付) / type(収入 or 支出) / category(カテゴリー) / 
-         amount(金額) / memo(メモ)
+カラム:　id(項目){主キー(サロゲートキーを使用)} / date(日付) / type(収入 or 支出) / category(カテゴリー) / amount(金額) / memo(メモ)
+
 
 ## 3. 変換表
 def init_db():の変換
 DATABASE = "Todo.db" → DATABASE = "Logbook.db"
-CREATE TABLE IF NOT EXISTS Todo ( → CREATE TABLE IF NOT EXISTS Logbook (
+CREATE TABLE IF NOT EXISTS Todo ( → CREATE TABLE IF NOT EXISTS Logbook )
 title TEXT NOT NULL, → date TEXT NOT NULL,
 done INTEGER DEFAULT 0 → type TEXT NOT NULL,
 ここからは新たに追加するカラム
