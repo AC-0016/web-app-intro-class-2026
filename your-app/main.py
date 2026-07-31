@@ -65,11 +65,16 @@ class LogbookCreate(BaseModel):
     memo: str | None = None
 
 
-class LookUpdate(BaseModel):
+class LogbookUpdate(BaseModel):
     # TODOを更新するときに受け取るデータ
     # done は True / False（完了したかどうか）
-    done: bool
-
+    # 家計簿ようにT or Fではなく、それぞれのカラムに合う型に変更。
+    # memo: str | None = Noneは記入しなくてもよいためNoneをOK
+    date: str
+    type: str
+    category: str
+    amount: int
+    memo: str | None = None
 
 # --- APIエンドポイント ---
 # @app.get / @app.post などの飾り（デコレータ）で、
@@ -136,19 +141,18 @@ def create_logbook(logbook:LogbookCreate ):
 
 # PUT /todos/5 のように、URLの {todo_id} の部分が引数 todo_id に入る
 @app.put("/logbook/{logbook_id}")
-def update_logbook(logbook_id: int, logbook: LogbookCreate):
+def update_logbook(logbook_id: int, logbook: LogbookUpdate):
     """TODOの完了状態を更新する"""
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
 
     # まず、その id のTODOが本当にあるか確認する
-    cursor.execute("SELECT title FROM todos WHERE id = ?", (logbook_id,))
+    cursor.execute("SELECT id FROM Logbook WHERE id = ?", (logbook_id,))
     existing = cursor.fetchone()  # 1件だけ取り出す。無ければ None が返る
     if existing is None:
         conn.close()  # 見つからないときも接続は閉じてから終わる
         # 404エラー（見つからない）を返して処理を中断する
-        raise HTTPException(status_code=404, detail="TODO not found")
-
+        "Logbook not found"
     # done（完了状態）を更新する。True/False は int() で 1/0 に変換して保存
     cursor.execute(
         "UPDATE Logbook SET done = ? WHERE id = ?",
@@ -158,7 +162,8 @@ def update_logbook(logbook_id: int, logbook: LogbookCreate):
 
     conn.close()
     # existing は (title,) のタプルなので、先頭を取り出す
-    return {"id": logbook_id, "title": existing[0], "done": logbook.done}
+    # 下記のreturnもカラム用に書き換える。
+    return {"id, date, type, category, amount, memo": logbook.done}
 
 
 @app.delete("/todos/{todo_id}")  # DELETE /todos/5 で id=5 のTODOを削除
