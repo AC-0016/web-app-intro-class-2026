@@ -42,7 +42,6 @@ class LogbookCreate(BaseModel):
     todos = cursor.fetchall()  # 取り出した全行をリストで受け取る
 
 7月24日行ったこと
-
 ・設計データの作成
 ・API設計の作成
 ・変換表の作成
@@ -51,3 +50,19 @@ class LogbookCreate(BaseModel):
 ・app.jsのtodosをlogbooksに変更
 ・app.jsのTodoをLogbookに変更
 ・app.jsのTodosをLogbooksに変更
+
+7月31日に行ったこと
+・main.pyのtodoをlogbookに変更
+・main.pyのtodosをlogbooksに変更
+・main.pyのTodoをLogbookに変更
+・main.pyのTodosをLogbooksに変更
+・何度も変えてもエラーになるのでchatGPTに相談
+　→誤字が見つかった
+
+8月7日に行ったこと
+・前期最終提出フォームの下書き
+・7月10日～7月31までの修正で正常に動かなかったのでChatGPTに質問
+　→todoリスト用で家計簿アプリには不要なもの、逆に必要な物が存在して
+　　いないことがわかった。私の知識では書き換え不可のためChatGPTに
+　　お願いしました。書き換えてもらった部分にはコメントアウトで解説を
+　　書きます。
