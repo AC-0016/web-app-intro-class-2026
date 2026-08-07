@@ -26,7 +26,7 @@ app.add_middleware(
 )
 
 # --- データベース設定 ---
-# データを保存するファイルの名前。アプリと同じフォルダに todo.db が作られる
+# データを保存するファイルの名前。アプリと同じフォルダに Logbook.db が作られる
 DATABASE = "Logbook.db"
 
 
@@ -34,10 +34,13 @@ def init_db():
     """データベースとテーブルを初期化する"""
     conn = sqlite3.connect(DATABASE)  # データベースに接続する
     cursor = conn.cursor()  # SQLを実行する係（カーソル）を用意する
-    # todos テーブルがまだ無ければ作る（IF NOT EXISTS）
-    #   id    : 自動で増える番号（主キー）
-    #   title : TODOの内容（空はNG）
-    #   done  : 完了したかどうか（0=未完了, 1=完了）
+    # Logbook:テーブル
+    #   id    : 自動で増える番号（主キー）(サロゲートキー)
+    #   date  : 日付（空はNG）
+    #   type  : 収入or支出（空はNG）
+    #   category: カテゴリ（空はNG）（食費、交通費、光熱費 等）
+    #   amount: 金額（空はNG）
+    #   memo  : メモ（空でもOK）
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Logbook (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
