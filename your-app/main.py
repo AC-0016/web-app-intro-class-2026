@@ -155,38 +155,45 @@ def update_logbook(logbook_id: int, logbook: LogbookUpdate):
     if existing is None:
         conn.close()  # 見つからないときも接続は閉じてから終わる
         # 404エラー（見つからない）を返して処理を中断する
-        "Logbook not found"
+        raise HTTPException(status_code=404, detail="Logbook not found")
     # done（完了状態）を更新する。True/False は int() で 1/0 に変換して保存
     cursor.execute(
-        "UPDATE Logbook SET done = ? WHERE id = ?",
-        (int(logbook.done), logbook_id),
+        "UPDATE Logbook SET date = ?, type = ?, category = ?, amount = ?, memo = ? WHERE id = ?",
+        (logbook.date, logbook.type, logbook.category, logbook.amount, logbook.memo, logbook_id)
     )
     conn.commit()  # 更新を確定する
 
     conn.close()
-    # existing は (title,) のタプルなので、先頭を取り出す
-    # 下記のreturnもカラム用に書き換える。
-    return {"id, date, type, category, amount, memo": logbook.done}
+    ## 最初は「:」で区切らないで書いていたが、区切らずに書くと1つのキーとして扱われてしまう。
+    ## 「:」で区切ることで6つのキーとして扱われる。
+    return {
+    "id": logbook_id,
+    "date": logbook.date,
+    "type": logbook.type,
+    "category": logbook.category,
+    "amount": logbook.amount,
+    "memo": logbook.memo
+}
 
 
-@app.delete("/todos/{todo_id}")  # DELETE /todos/5 で id=5 のTODOを削除
-def delete_todo(logbook_id: int):
+@app.delete("/logbook/{logbook_id}")  # DELETE /todos/5 で id=5 のTODOを削除
+def delete_logbook(logbook_id: int):
     """TODOを削除する"""
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
 
     # 削除する前に、その id のTODOが存在するか確認する
-    cursor.execute("SELECT id FROM todos WHERE id = ?", (logbook_id,))
+    cursor.execute("SELECT id FROM Logbook WHERE id = ?", (logbook_id,))
     existing = cursor.fetchone()
     if existing is None:
         conn.close()
-        raise HTTPException(status_code=404, detail="TODO not found")
+        raise HTTPException(status_code=404, detail="Logbook not found")
 
-    cursor.execute("DELETE FROM todos WHERE id = ?", (logbook_id,))  # 削除する
+    cursor.execute("DELETE FROM Logbook WHERE id = ?", (logbook_id,))  # 削除する
     conn.commit()  # 削除を確定する
 
     conn.close()
-    return {"message": "TODO deleted", "id": logbook_id}
+    return {"message": "Logbook deleted", "id": logbook_id}
 
 
 # --- 静的ファイル配信 ---
