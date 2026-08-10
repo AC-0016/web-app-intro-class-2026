@@ -53,37 +53,79 @@ async function loadLogbooks() {
  */
 async function addLogbook() {
   // 入力欄の要素を取得し、入力された文字を読み取る（trimで前後の空白を除去）
-  const input = document.getElementById("todo-input");
-  const title = input.value.trim();
+const date = document.getElementById("date-input").value;
+const type = document.getElementById("type-input").value;
+const category = document.getElementById("category-input").value.trim();
+const amount = document.getElementById("amount-input").value;
+const memo = document.getElementById("memo-input").value.trim();
 
   // 送信前のチェック（バリデーション）: 空のときは送らずに注意を表示
-  if (title === "") {
-    showError("TODOのタイトルを入力してください");
-    return;
-  }
+if (date === "") {
+  showError("日付を入力してください");
+  return;
+}
 
-  // 長すぎるときも送らない（サーバー側でも100文字までチェックしている）
-  if (title.length > 100) {
-    showError("タイトルは100文字以内で入力してください");
-    return;
-  }
+if (type === "") {
+  showError("収入または支出を選択してください");
+  return;
+}
 
+if (category === "") {
+  showError("カテゴリを入力してください");
+  return;
+}
+
+if (amount === "") {
+  showError("金額を入力してください");
+  return;
+}
   try {
     // サーバーに「このTODOを追加して」と送る
-    const response = await fetch(API_URL, {
-      method: "POST", // POST = 新しいデータを作る
-      headers: { "Content-Type": "application/json" }, // 中身はJSON形式だと伝える
-      body: JSON.stringify({ title: title }), // データをJSON文字列にして送る
+const response = await fetch(API_URL, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    date: date,
+    type: type,
+    category: category,
+    amount: Number(amount),
+    memo: memo
+  }),
+});
+
+    if (!response.ok) {
+      const error = await response.json();
+      showError(error.detail || "家計簿の追加に失敗しました");
+      return;
+    }
+
+document.getElementById("date-input").value = ""; //入力欄を空にする処理を変更
+document.getElementById("type-input").value = "";
+document.getElementById("category-input").value = "";
+document.getElementById("amount-input").value = "";
+document.getElementById("memo-input").value = "";
+
+await loadLogbooks();
+} catch (error) {
+  showError("通信エラーが発生しました");
+}
+}   // ← addLogbook() の終了
+
+// ↓↓↓ この直後に追加 ↓↓↓
+
+async function deleteLogbook(id) {
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
     });
 
     if (!response.ok) {
       const error = await response.json();
-      showError(error.detail || "TODOの追加に失敗しました");
+      showError(error.detail || "家計簿の削除に失敗しました");
       return;
     }
 
-    input.value = ""; // 入力欄を空に戻す
-    await loadLogbooks(); // 一覧を取り直して、追加結果を画面に反映する
+    await loadLogbooks();
   } catch (error) {
     showError("通信エラーが発生しました");
   }
@@ -93,49 +135,13 @@ async function addLogbook() {
  * TODOの完了状態を切り替える
  * id: 対象のTODOの番号 / currentDone: いまの完了状態(true/false)
  */
-async function toggleLogbook(id, currentDone) {
-  try {
-    // `${API_URL}/${id}` で /todos/5 のようなアドレスを作る（id=5のTODOが対象）
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: "PUT", // PUT = 既存のデータを更新する
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ done: !currentDone }), // !で完了/未完了を反転させる
-    });
 
-    if (!response.ok) {
-      const error = await response.json();
-      showError(error.detail || "TODOの更新に失敗しました");
-      return;
-    }
-
-    await loadLogbooks(); // 一覧を取り直して、更新結果を画面に反映する
-  } catch (error) {
-    showError("通信エラーが発生しました");
-  }
-}
 
 /**
  * TODOを削除する
  * id: 削除したいTODOの番号
  */
-async function deleteLogbook(id) {
-  try {
-    // /todos/5 のようなアドレスに対して削除を依頼する
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: "DELETE", // DELETE = データを削除する
-    });
 
-    if (!response.ok) {
-      const error = await response.json();
-      showError(error.detail || "TODOの削除に失敗しました");
-      return;
-    }
-
-    await loadLogbooks(); // 一覧を取り直して、削除結果を画面に反映する
-  } catch (error) {
-    showError("通信エラーが発生しました");
-  }
-}
 
 // ============================================================
 // 描画
@@ -166,19 +172,14 @@ function renderLogbooks(logbooks) {
     label.className = "todo-label";
 
     // 完了チェックボックス
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.className = "todo-checkbox";
-     // いまの完了状態をチェックに反映
-    // チェックが変わったら、完了状態を切り替える関数を呼ぶ
+   
 
     // TODOのタイトル文字。textContent で安全に入れる（XSS対策）
     const titleSpan = document.createElement("span");
     titleSpan.className = "todo-title";
     titleSpan.textContent =
-    `${logbook.date} ${logbook.type} ${logbook.category} ¥${logbook.amount}`; // カラムの分追加したもの。
-    // label の中に [チェックボックス][タイトル] を入れる
-    label.appendChild(checkbox);
+    `${logbook.date} ${logbook.type} ${logbook.category} ${logbook.amount}円 ${logbook.memo ?? ""}`; // カラムの分追加したもの。
+    // label の中に[タイトル] を入れる
     label.appendChild(titleSpan);
 
     // 削除ボタン。押されたら削除する関数を呼ぶ
@@ -215,9 +216,9 @@ function showError(message) {
 // ============================================================
 
 // フォームが送信された（追加ボタン or Enter）ときの動き
-document.getElementById("todo-form").addEventListener("submit", function (e) {
-  e.preventDefault(); // ページが再読み込みされる標準動作を止める
-  addLogbook(); // 自分で用意した追加処理を呼ぶ
+document.getElementById("logbook-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  addLogbook();
 });
 
 // ページ読み込み時に、まずTODO一覧を取得して表示する（ここがスタート地点）
