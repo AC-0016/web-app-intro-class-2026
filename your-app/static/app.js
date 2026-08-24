@@ -19,6 +19,10 @@
 // サーバー側のAPIのアドレス（main.py の @app.get("/todos") などに対応）
 const API_URL = "/logbook";
 
+// 円グラフを保持する変数
+let incomeChart = null;
+let expenseChart = null;
+
 // ============================================================
 // TODO操作（CRUD）
 // ============================================================
@@ -42,6 +46,7 @@ async function loadLogbooks() {
     // 返ってきたデータ(JSON)をJavaScriptの配列に変換する
     const logbooks = await response.json();
     renderLogbooks(logbooks); // 画面に描画する
+    updateCharts(logbooks); // 円グラフを更新する
   } catch (error) {
     // そもそもサーバーにつながらなかったときなど
     showError("通信エラーが発生しました");
@@ -129,6 +134,70 @@ async function deleteLogbook(id) {
   } catch (error) {
     showError("通信エラーが発生しました");
   }
+}
+
+// ============================================================
+// 円グラフ→138～201まで
+// ============================================================
+
+/**
+ * 収入と支出の円グラフを更新する
+ */
+function updateCharts(logbooks) {
+  // 収入と支出をカテゴリごとに集計する
+  const incomeData = {};
+  const expenseData = {};
+
+  logbooks.forEach((logbook) => {
+    if (logbook.type === "収入") {
+      incomeData[logbook.category] =
+        (incomeData[logbook.category] || 0) + logbook.amount;
+    }
+
+    if (logbook.type === "支出") {
+      expenseData[logbook.category] =
+        (expenseData[logbook.category] || 0) + logbook.amount;
+    }
+  });
+
+  // 以前の円グラフがあれば削除する
+  if (incomeChart) {
+    incomeChart.destroy();
+  }
+
+  if (expenseChart) {
+    expenseChart.destroy();
+  }
+
+  // 収入の円グラフ
+  const incomeCtx = document.getElementById("income-chart");
+
+  incomeChart = new Chart(incomeCtx, {
+    type: "pie",
+    data: {
+      labels: Object.keys(incomeData),
+      datasets: [
+        {
+          data: Object.values(incomeData),
+        },
+      ],
+    },
+  });
+
+  // 支出の円グラフ
+  const expenseCtx = document.getElementById("expense-chart");
+
+  expenseChart = new Chart(expenseCtx, {
+    type: "pie",
+    data: {
+      labels: Object.keys(expenseData),
+      datasets: [
+        {
+          data: Object.values(expenseData),
+        },
+      ],
+    },
+  });
 }
 
 /**

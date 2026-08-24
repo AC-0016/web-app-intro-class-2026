@@ -225,3 +225,35 @@ body {
     width: 100%; /* ボタンを横幅いっぱいにして押しやすく */
   }
 }
+
+/* --- 円グラフ --- */
+/* --- 円グラフ --- */
+/* 収入・支出の円グラフを横並びにする */
+.charts-area {
+  display: flex;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+/* 収入・支出それぞれの円グラフを入れるカード */
+.chart-card {
+  flex: 1;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+/* 円グラフのタイトル */
+.chart-card h2 {
+  margin-bottom: 16px;
+  font-size: 20px;
+}
+
+/* 円グラフの大きさ */
+.chart-card canvas {
+  max-width: 300px;
+  max-height: 300px;
+  margin: 0 auto;
+}
