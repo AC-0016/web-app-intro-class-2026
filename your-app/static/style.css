@@ -257,3 +257,27 @@ body {
   max-height: 300px;
   margin: 0 auto;
 }
+
+/* --- 編集・削除ボタン --- */
+.button-area {
+  display: flex;
+  gap: 8px;
+}
+
+/* 編集ボタン */
+.edit-button {
+  padding: 6px 12px;
+  background-color: transparent;
+  color: #2563eb;
+  border: 1px solid #93c5fd;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.edit-button:hover {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border-color: #60a5fa;
+}

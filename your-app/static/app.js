@@ -135,6 +135,69 @@ async function deleteLogbook(id) {
     showError("通信エラーが発生しました");
   }
 }
+// 編集ボタンの作成
+async function editLogbook(logbook) {
+  const date = prompt("日付を入力してください", logbook.date);
+  if (date === null) return;
+
+  const type = prompt("収入または支出を入力してください", logbook.type);
+  if (type === null) return;
+
+  const category = prompt("カテゴリを入力してください", logbook.category);
+  if (category === null) return;
+
+  const amount = prompt("金額を入力してください", logbook.amount);
+  if (amount === null) return;
+
+  const memo = prompt("メモを入力してください", logbook.memo ?? "");
+  if (memo === null) return;
+
+  if (date.trim() === "") {
+    showError("日付を入力してください");
+    return;
+  }
+
+  if (type !== "収入" && type !== "支出") {
+    showError("収入または支出を入力してください");
+    return;
+  }
+
+  if (category.trim() === "") {
+    showError("カテゴリを入力してください");
+    return;
+  }
+
+  if (amount.trim() === "" || isNaN(Number(amount))) {
+    showError("金額を正しく入力してください");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/${logbook.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        date: date.trim(),
+        type: type,
+        category: category.trim(),
+        amount: Number(amount),
+        memo: memo.trim()
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      showError(error.detail || "家計簿の編集に失敗しました");
+      return;
+    }
+
+    await loadLogbooks();
+  } catch (error) {
+    showError("通信エラーが発生しました");
+  }
+}
 
 // ============================================================
 // 円グラフ→138～201まで
@@ -251,15 +314,30 @@ function renderLogbooks(logbooks) {
     // label の中に[タイトル] を入れる
     label.appendChild(titleSpan);
 
-    // 削除ボタン。押されたら削除する関数を呼ぶ
-    const deleteBtn = document.createElement("button");
-    deleteBtn.className = "delete-button";
-    deleteBtn.textContent = "削除";
-    deleteBtn.addEventListener("click", () => deleteLogbook(logbook.id));
+// 編集ボタン
+const editBtn = document.createElement("button");
+editBtn.className = "edit-button";
+editBtn.textContent = "編集";
+editBtn.addEventListener("click", () => editLogbook(logbook));
 
-    // <li> の中に [label][削除ボタン] を入れて、リストに追加する
-    li.appendChild(label);
-    li.appendChild(deleteBtn);
+// 削除ボタン
+const deleteBtn = document.createElement("button");
+deleteBtn.className = "delete-button";
+deleteBtn.textContent = "削除";
+deleteBtn.addEventListener("click", () => deleteLogbook(logbook.id));
+
+// ボタンをまとめる
+const buttonArea = document.createElement("div");
+buttonArea.className = "button-area";
+
+buttonArea.appendChild(editBtn);
+buttonArea.appendChild(deleteBtn);
+
+// <li> の中に [label][編集][削除] を入れる
+li.appendChild(label);
+li.appendChild(buttonArea);
+
+list.appendChild(li);
 
     list.appendChild(li);
   });
