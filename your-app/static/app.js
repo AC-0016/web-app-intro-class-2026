@@ -233,34 +233,67 @@ function updateCharts(logbooks) {
   }
 
   // 収入の円グラフ
-  const incomeCtx = document.getElementById("income-chart");
+// 収入の円グラフ
+const incomeCtx = document.getElementById("income-chart");
 
-  incomeChart = new Chart(incomeCtx, {
-    type: "pie",
-    data: {
-      labels: Object.keys(incomeData),
-      datasets: [
-        {
-          data: Object.values(incomeData),
+incomeChart = new Chart(incomeCtx, {
+  type: "pie",
+  data: {
+    labels: Object.keys(incomeData),
+    datasets: [
+      {
+        data: Object.values(incomeData),
+      },
+    ],
+  },
+  options: {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const data = context.dataset.data;
+            const total = data.reduce((sum, value) => sum + value, 0);
+            const value = context.raw;
+            const percentage = ((value / total) * 100).toFixed(1);
+
+            return `${context.label}: ${value}円 (${percentage}%)`;
+          },
         },
-      ],
+      },
     },
-  });
+  },
+});
 
-  // 支出の円グラフ
-  const expenseCtx = document.getElementById("expense-chart");
+// 支出の円グラフ
+const expenseCtx = document.getElementById("expense-chart");
 
-  expenseChart = new Chart(expenseCtx, {
-    type: "pie",
-    data: {
-      labels: Object.keys(expenseData),
-      datasets: [
-        {
-          data: Object.values(expenseData),
+expenseChart = new Chart(expenseCtx, {
+  type: "pie",
+  data: {
+    labels: Object.keys(expenseData),
+    datasets: [
+      {
+        data: Object.values(expenseData),
+      },
+    ],
+  },
+  options: {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const data = context.dataset.data;
+            const total = data.reduce((sum, value) => sum + value, 0);
+            const value = context.raw;
+            const percentage = ((value / total) * 100).toFixed(1);
+
+            return `${context.label}: ${value}円 (${percentage}%)`;
+          },
         },
-      ],
+      },
     },
-  });
+  },
+});
 }
 
 /**
@@ -308,9 +341,14 @@ function renderLogbooks(logbooks) {
 
     // TODOのタイトル文字。textContent で安全に入れる（XSS対策）
     const titleSpan = document.createElement("span");
-    titleSpan.className = "todo-title";
-    titleSpan.textContent =
-    `${logbook.date} ${logbook.type} ${logbook.category} ${logbook.amount}円 ${logbook.memo ?? ""}`; // カラムの分追加したもの。
+titleSpan.className = "todo-title";
+
+const dateObject = new Date(logbook.date);
+const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+const weekday = weekdays[dateObject.getDay()];
+
+titleSpan.textContent =
+  `${logbook.date} (${weekday}) ${logbook.type} ${logbook.category} ${logbook.amount}円 ${logbook.memo ?? ""}`;
     // label の中に[タイトル] を入れる
     label.appendChild(titleSpan);
 
@@ -370,3 +408,10 @@ document.getElementById("logbook-form").addEventListener("submit", function (e) 
 
 // ページ読み込み時に、まずTODO一覧を取得して表示する（ここがスタート地点）
 loadLogbooks();
+
+// 日付入力欄のどこをクリックしてもカレンダーを開く
+const dateInput = document.getElementById("date-input");
+
+dateInput.addEventListener("click", () => {
+  dateInput.showPicker();
+});
