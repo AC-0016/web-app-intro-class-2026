@@ -281,3 +281,21 @@ body {
   color: #1d4ed8;
   border-color: #60a5fa;
 }
+
+/* --- 並び順切替ボタン --- */
+.sort-button {
+  padding: 8px 20px;
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: block;
+  margin: 8px auto 0;
+}
+
+.sort-button:hover {
+  background-color: #4b5563;
+}

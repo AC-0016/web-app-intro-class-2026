@@ -22,6 +22,10 @@ const API_URL = "/logbook";
 // 円グラフを保持する変数
 let incomeChart = null;
 let expenseChart = null;
+// 日付の並び順
+// true = 降順（新しい日付 → 古い日付）
+// false = 昇順（古い日付 → 新しい日付）
+let sortDescending = true;
 
 // ============================================================
 // TODO操作（CRUD）
@@ -45,8 +49,25 @@ async function loadLogbooks() {
 
     // 返ってきたデータ(JSON)をJavaScriptの配列に変換する
     const logbooks = await response.json();
+
+    // 円グラフ用に、入力順のデータを保存する
+    const chartLogbooks = [...logbooks];
+
+    // 日付の並び順を変更する
+    if (sortDescending) {
+      // 降順（新しい日付 → 古い日付）
+      logbooks.sort((a, b) => {
+        return b.date.localeCompare(a.date);
+      });
+    } else {
+      // 昇順（古い日付 → 新しい日付）
+      logbooks.sort((a, b) => {
+        return a.date.localeCompare(b.date);
+      });
+    }
+
     renderLogbooks(logbooks); // 画面に描画する
-    updateCharts(logbooks); // 円グラフを更新する
+    updateCharts(chartLogbooks); // 円グラフを更新する
   } catch (error) {
     // そもそもサーバーにつながらなかったときなど
     showError("通信エラーが発生しました");
@@ -379,8 +400,6 @@ buttonArea.appendChild(deleteBtn);
 li.appendChild(label);
 li.appendChild(buttonArea);
 
-list.appendChild(li);
-
     list.appendChild(li);
   });
 }
@@ -432,4 +451,10 @@ document.getElementById("category-input").addEventListener("change", function ()
     customCategoryInput.required = false;
     customCategoryInput.value = "";
   }
+});
+
+// 日付の並び順を切り替えるボタン
+document.getElementById("sort-button").addEventListener("click", async function () {
+  sortDescending = !sortDescending;
+  await loadLogbooks();
 });
