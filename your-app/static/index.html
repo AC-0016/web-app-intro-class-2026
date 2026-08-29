@@ -38,13 +38,33 @@
     <option value="支出">支出</option>
   </select>
 
-  <!-- カテゴリ、金額、メモはそれぞれ別のカラムとして定義しているためinputが3つ必要になる。 -->
-  <input
-    type="text"
+    <!-- selectでtypeに入れる値を選択する -->
+  <select
     id="category-input"
     class="todo-input"
-    placeholder="カテゴリ"
     required
+  >
+    <option value="">カテゴリ選択</option>
+    <option value="家賃">家賃</option>
+    <option value="食費">食費</option>
+    <option value="日用品費">日用品費</option>
+    <option value="水道光熱費">水道光熱費</option>
+    <option value="交通費">交通費</option>
+    <option value="通信費">通信費</option>
+    <option value="医療費">医療費</option>
+    <option value="衣服費">衣服費</option>
+    <option value="その他">その他</option>
+    <option value="追加">追加</option>
+  </select>
+
+  <!-- 金額、メモはそれぞれ別のカラムとして定義しているためinputが3つ必要になる。また、カテゴリのその他の枠があるためカテゴリも追加 -->
+
+    <input
+    type="text"
+    id="custom-category-input"
+    class="todo-input"
+    placeholder=""
+    style="display: none;"
   />
 
   <input

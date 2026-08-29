@@ -60,7 +60,11 @@ async function addLogbook() {
   // 入力欄の要素を取得し、入力された文字を読み取る（trimで前後の空白を除去）
 const date = document.getElementById("date-input").value;
 const type = document.getElementById("type-input").value;
-const category = document.getElementById("category-input").value.trim();
+let category = document.getElementById("category-input").value.trim();
+
+if (category === "追加") {
+  category = document.getElementById("custom-category-input").value.trim();
+}
 const amount = document.getElementById("amount-input").value;
 const memo = document.getElementById("memo-input").value.trim();
 
@@ -414,4 +418,18 @@ const dateInput = document.getElementById("date-input");
 
 dateInput.addEventListener("click", () => {
   dateInput.showPicker();
+});
+
+// カテゴリで「追加」を選んだときの処理
+document.getElementById("category-input").addEventListener("change", function () {
+  const customCategoryInput = document.getElementById("custom-category-input");
+
+  if (this.value === "追加") {
+    customCategoryInput.style.display = "block";
+    customCategoryInput.required = true;
+  } else {
+    customCategoryInput.style.display = "none";
+    customCategoryInput.required = false;
+    customCategoryInput.value = "";
+  }
 });
