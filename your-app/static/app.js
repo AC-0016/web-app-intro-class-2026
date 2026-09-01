@@ -458,3 +458,115 @@ document.getElementById("sort-button").addEventListener("click", async function 
   sortDescending = !sortDescending;
   await loadLogbooks();
 });
+
+// 月管理ボタン
+document.getElementById("month-button").addEventListener("click", function () {
+  const monthSelect = document.getElementById("month-select");
+
+  // プルダウンの表示・非表示を切り替える
+  if (monthSelect.style.display === "none") {
+    monthSelect.style.display = "block";
+
+    // 家計簿データから月の一覧を作成する
+    loadMonthOptions();
+  } else {
+    monthSelect.style.display = "none";
+  }
+});
+
+
+// 月の選択肢を作成する
+async function loadMonthOptions() {
+  try {
+    const response = await fetch(API_URL);
+
+    if (!response.ok) {
+      const error = await response.json();
+      showError(error.detail || "家計簿の取得に失敗しました");
+      return;
+    }
+
+    const logbooks = await response.json();
+
+    const monthSelect = document.getElementById("month-select");
+
+    // 現在の選択肢を一度リセットする
+    monthSelect.innerHTML = "";
+
+    // 最初の選択肢
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "月を選択";
+    monthSelect.appendChild(defaultOption);
+
+    // 家計簿データから年月だけを取り出す
+    const months = [];
+
+    logbooks.forEach((logbook) => {
+      const month = logbook.date.substring(0, 7);
+
+      if (!months.includes(month)) {
+        months.push(month);
+      }
+    });
+
+    // 新しい月から順番に並べる
+    months.sort((a, b) => b.localeCompare(a));
+
+    // プルダウンに月を追加する
+    months.forEach((month) => {
+      const option = document.createElement("option");
+
+      option.value = month;
+      option.textContent = month.replace("-", "/");
+
+      monthSelect.appendChild(option);
+    });
+  } catch (error) {
+    showError("通信エラーが発生しました");
+  }
+}
+
+// 月を選択したときの処理
+document.getElementById("month-select").addEventListener("change", async function () {
+  const selectedMonth = this.value;
+
+  // 月が選択されていない場合は、全件表示する
+  if (selectedMonth === "") {
+    await loadLogbooks();
+    return;
+  }
+
+  try {
+    const response = await fetch(API_URL);
+
+    if (!response.ok) {
+      const error = await response.json();
+      showError(error.detail || "家計簿の取得に失敗しました");
+      return;
+    }
+
+    const logbooks = await response.json();
+
+    // 選択した年月と一致する家計簿だけを残す
+    const filteredLogbooks = logbooks.filter((logbook) => {
+      return logbook.date.substring(0, 7) === selectedMonth;
+    });
+
+    // 日付順に並べる
+    if (sortDescending) {
+      filteredLogbooks.sort((a, b) => b.date.localeCompare(a.date));
+    } else {
+      filteredLogbooks.sort((a, b) => a.date.localeCompare(b.date));
+    }
+
+    // 選択した月の家計簿だけを表示する
+    renderLogbooks(filteredLogbooks);
+
+    // 選択した月の円グラフを表示する
+    updateCharts(filteredLogbooks);
+
+  } catch (error) {
+    showError("通信エラーが発生しました");
+  }
+});
