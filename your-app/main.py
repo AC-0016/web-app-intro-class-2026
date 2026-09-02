@@ -79,6 +79,12 @@ class LogbookUpdate(BaseModel):
     amount: int
     memo: str | None = None
 
+
+# LLM相談で受け取るプロンプト
+class ConsultationCreate(BaseModel):
+    prompt: str
+
+
 # --- APIエンドポイント ---
 # @app.get / @app.post などの飾り（デコレータ）で、
 # 「どのURLに、どの種類のリクエストが来たら、この関数を動かすか」を決める。
@@ -194,6 +200,21 @@ def delete_logbook(logbook_id: int):
 
     conn.close()
     return {"message": "Logbook deleted", "id": logbook_id}
+
+
+# ============================================================
+# LLM相談API
+# ============================================================
+
+@app.post("/consultation")
+def consultation(consultation: ConsultationCreate):
+    """LLM相談で送られてきたプロンプトを受け取る"""
+
+    # 現段階ではLLMには接続せず、
+    # 受け取ったプロンプトをそのまま返す
+    return {
+        "prompt": consultation.prompt
+    }
 
 
 # --- 静的ファイル配信 ---

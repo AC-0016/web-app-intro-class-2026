@@ -588,7 +588,7 @@ document.getElementById("consultation-button").addEventListener("click", functio
 });
 
 // 完了ボタンを押したときの処理
-document.getElementById("prompt-submit-button").addEventListener("click", function () {
+document.getElementById("prompt-submit-button").addEventListener("click", async function () {
   const promptInput = document.getElementById("prompt-input");
   const prompt = promptInput.value.trim();
 
@@ -598,6 +598,26 @@ document.getElementById("prompt-submit-button").addEventListener("click", functi
     return;
   }
 
-  // 現段階ではLLMを呼び出さない
-  console.log("入力されたプロンプト:", prompt);
+  // FastAPIにプロンプトを送信する
+  try {
+    const response = await fetch("/consultation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        prompt: prompt
+      })
+    });
+
+    // FastAPIから返ってきたデータを取得する
+    const data = await response.json();
+
+    // FastAPIからの返答を確認する
+    console.log("FastAPIからの返答:", data.prompt);
+
+  } catch (error) {
+    console.error("FastAPIとの通信に失敗しました:", error);
+    showError("相談処理でエラーが発生しました");
+  }
 });
