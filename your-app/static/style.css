@@ -85,20 +85,32 @@ body {
   outline: none; /* クリック時にブラウザが出す枠を消す（下で自前の色をつける） */
   transition: border-color 0.3s; /* 枠線の色が0.3秒かけてなめらかに変わる */
 }
+
 /* 数字の加算バーを見えなくする */
 .todo-input[type="number"]::-webkit-inner-spin-button,
 .todo-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .todo-input[type="number"] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 /* :focus = その要素を選択中（クリックや入力中）のときだけ適用 */
 .todo-input:focus {
   border-color: #2563eb; /* 入力中は枠線を青くする */
+}
+
+/* --- 追加・電卓ボタン --- */
+/* 追加ボタンと電卓ボタンを縦に並べる箱 */
+.add-button-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  /* 電卓をこのエリアを基準に配置する */
+  position: relative;
 }
 
 /* 追加ボタン */
@@ -118,6 +130,23 @@ body {
 /* :hover = マウスを乗せたときだけ適用 */
 .todo-button:hover {
   background-color: #1d4ed8; /* 少し濃い青にして「押せる」感を出す */
+}
+
+/* 電卓ボタン */
+.calculator-button {
+  padding: 8px 20px;
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+}
+
+.calculator-button:hover {
+  background-color: #4b5563;
 }
 
 /* --- TODOリスト --- */
@@ -224,6 +253,14 @@ body {
   .todo-button {
     width: 100%; /* ボタンを横幅いっぱいにして押しやすく */
   }
+
+  .add-button-area {
+    width: 100%;
+  }
+
+  .calculator-button {
+    width: 100%;
+  }
 }
 
 /* --- 円グラフ --- */
@@ -310,4 +347,85 @@ body {
   cursor: pointer;
   margin-left: 8px;
   background-color: white;
+}
+
+/* --- 電卓本体 --- */
+.calculator {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  padding: 12px;
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  width: 180px;
+  z-index: 1000;
+}
+
+/* 電卓の表示欄 */
+.calculator-display {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  text-align: right;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 18px;
+}
+
+/* 電卓のボタンを4列にする */
+.calculator-button-area {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+/* 電卓の各ボタン */
+.calculator-key {
+  padding: 10px 0;
+  border: none;
+  border-radius: 4px;
+  background-color: #e5e7eb;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* 電卓ボタンにカーソルを合わせたとき */
+.calculator-key:hover {
+  background-color: #d1d5db;
+}
+
+/* 金額に反映ボタン */
+.calculator-apply-button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+/* 閉じるボタン */
+.calculator-close-button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: #6b7280;
+  color: white;
+  cursor: pointer;
+}
+
+/* ボタンにカーソルを合わせたとき */
+.calculator-apply-button:hover {
+  background-color: #1d4ed8;
+}
+
+.calculator-close-button:hover {
+  background-color: #4b5563;
 }
