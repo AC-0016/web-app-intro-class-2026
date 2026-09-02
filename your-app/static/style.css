@@ -348,3 +348,69 @@ body {
   margin-left: 8px;
   background-color: white;
 }
+
+/* ============================================
+   LLM相談エリア
+   ============================================ */
+
+/* 相談エリア全体 */
+.consultation-area {
+  margin-top: 24px;
+  text-align: center;
+}
+
+/* 相談ボタン */
+.consultation-button {
+  padding: 12px 32px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.consultation-button:hover {
+  background-color: #1d4ed8;
+}
+
+/* プロンプト入力エリア */
+.prompt-area {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* プロンプト入力欄 */
+.prompt-input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+}
+
+.prompt-input:focus {
+  border-color: #2563eb;
+}
+
+/* 完了ボタン */
+.prompt-submit-button {
+  padding: 12px 24px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.prompt-submit-button:hover {
+  background-color: #1d4ed8;
+}

@@ -123,21 +123,49 @@
       <!-- 家計簿一覧 -->
       <ul id="todo-list" class="todo-list"></ul>
 
-      <!-- 円グラフ表示エリア -->
-      <div class="charts-area">
-        <!-- 収入 -->
-        <div class="chart-card">
-          <h2>収入</h2>
-          <canvas id="income-chart"></canvas>
-        </div>
+<!-- 円グラフ表示エリア -->
+<div class="charts-area">
+  <!-- 収入 -->
+  <div class="chart-card">
+    <h2>収入</h2>
+    <canvas id="income-chart"></canvas>
+  </div>
 
-        <!-- 支出 -->
-        <div class="chart-card">
-          <h2>支出</h2>
-          <canvas id="expense-chart"></canvas>
-        </div>
-      </div>
-    </main>
+  <!-- 支出 -->
+  <div class="chart-card">
+    <h2>支出</h2>
+    <canvas id="expense-chart"></canvas>
+  </div>
+</div>
+
+<!-- LLM相談エリア -->
+<div class="consultation-area">
+  <!-- 相談ボタン -->
+  <button type="button" id="consultation-button" class="consultation-button">
+    相談
+  </button>
+
+  <!-- プロンプト入力エリア -->
+  <div id="prompt-area" class="prompt-area" style="display: none;">
+    <input
+      type="text"
+      id="prompt-input"
+      class="prompt-input"
+      placeholder="相談内容を入力してください"
+    />
+
+    <!-- 完了ボタン -->
+    <button
+      type="button"
+      id="prompt-submit-button"
+      class="prompt-submit-button"
+    >
+      完了
+    </button>
+  </div>
+</div>
+
+</main>
 
     <!-- フッター -->
     <footer class="footer">
