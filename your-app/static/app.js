@@ -570,3 +570,34 @@ document.getElementById("month-select").addEventListener("change", async functio
     showError("通信エラーが発生しました");
   }
 });
+
+// ============================================================
+// LLM相談機能
+// ============================================================
+
+// 相談ボタンを押したときの処理
+document.getElementById("consultation-button").addEventListener("click", function () {
+  const promptArea = document.getElementById("prompt-area");
+  const promptInput = document.getElementById("prompt-input");
+
+  // プロンプト入力欄を表示する
+  promptArea.style.display = "flex";
+
+  // 入力欄にカーソルを移動する
+  promptInput.focus();
+});
+
+// 完了ボタンを押したときの処理
+document.getElementById("prompt-submit-button").addEventListener("click", function () {
+  const promptInput = document.getElementById("prompt-input");
+  const prompt = promptInput.value.trim();
+
+  // プロンプトが空の場合
+  if (prompt === "") {
+    showError("相談内容を入力してください");
+    return;
+  }
+
+  // 現段階ではLLMを呼び出さない
+  console.log("入力されたプロンプト:", prompt);
+});
