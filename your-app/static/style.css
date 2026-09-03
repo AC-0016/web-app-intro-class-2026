@@ -414,3 +414,31 @@ body {
 .prompt-submit-button:hover {
   background-color: #1d4ed8;
 }
+
+/* LLM返答エリア */
+.answer-area {
+  margin-top: 24px;
+  padding: 20px;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  text-align: left;
+}
+
+/* LLM返答エリアのタイトル */
+.answer-area h2 {
+  margin-bottom: 12px;
+  font-size: 20px;
+}
+
+/* LLMから返ってきた回答 */
+.answer-content {
+  padding: 16px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

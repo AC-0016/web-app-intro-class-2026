@@ -598,6 +598,16 @@ document.getElementById("prompt-submit-button").addEventListener("click", async 
     return;
   }
 
+  // LLM返答エリアを取得
+  const answerArea = document.getElementById("answer-area");
+  const answerContent = document.getElementById("answer-content");
+
+  // 回答欄を表示
+  answerArea.style.display = "block";
+
+  // 回答待ちの表示
+  answerContent.textContent = "回答を取得しています...";
+
   // FastAPIにプロンプトを送信する
   try {
     const response = await fetch("/consultation", {
@@ -610,14 +620,29 @@ document.getElementById("prompt-submit-button").addEventListener("click", async 
       })
     });
 
-    // FastAPIから返ってきたデータを取得する
+    // FastAPIからエラーが返ってきた場合
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("FastAPIエラー:", errorText);
+
+      answerContent.textContent = "回答の取得に失敗しました。";
+      showError("LLM相談でエラーが発生しました");
+      return;
+    }
+
+    // FastAPIから返ってきたJSONを取得
     const data = await response.json();
 
-    // FastAPIからの返答を確認する
-    console.log("FastAPIからの返答:", data.prompt);
+    // LLMの回答を表示
+    answerContent.textContent = data.answer;
+
+    // 確認用
+    console.log("LLMからの返答:", data.answer);
 
   } catch (error) {
     console.error("FastAPIとの通信に失敗しました:", error);
+
+    answerContent.textContent = "回答の取得に失敗しました。";
     showError("相談処理でエラーが発生しました");
   }
 });

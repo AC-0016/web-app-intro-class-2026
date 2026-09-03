@@ -4,12 +4,28 @@ TODOアプリ バックエンド - 完成版
 """
 
 import sqlite3  # Python標準のデータベース（SQLite）を使うためのライブラリ
+import os
 import uvicorn  # FastAPIアプリを動かすためのWebサーバー
 
+from dotenv import load_dotenv
+from openai import OpenAI
 from fastapi import FastAPI, HTTPException  # Webアプリ本体とエラー応答用
 from fastapi.middleware.cors import CORSMiddleware  # ブラウザからのアクセスを許可する設定
 from fastapi.staticfiles import StaticFiles  # HTML/CSS/JSなどのファイルを配信する機能
 from pydantic import BaseModel, Field  # 受け取るデータの形をチェックする道具
+
+
+# .envファイルから環境変数を読み込む
+load_dotenv()
+
+# .envからAPIキーが読み込めているか確認
+if os.getenv("OPENAI_API_KEY"):
+    print("OPENAI_API_KEYの読み込み成功")
+else:
+    print("OPENAI_API_KEYが設定されていません")
+
+# OpenAI APIを利用するためのクライアントを作成
+client = OpenAI()
 
 # --- FastAPIアプリ ---
 # このappが、Webアプリ全体の本体になる
@@ -208,12 +224,15 @@ def delete_logbook(logbook_id: int):
 
 @app.post("/consultation")
 def consultation(consultation: ConsultationCreate):
-    """LLM相談で送られてきたプロンプトを受け取る"""
+    """LLM相談で送られてきたプロンプトをOpenAIに送る"""
 
-    # 現段階ではLLMには接続せず、
-    # 受け取ったプロンプトをそのまま返す
+    response = client.responses.create(
+        model="gpt-5.5",
+        input=consultation.prompt
+    )
+
     return {
-        "prompt": consultation.prompt
+        "answer": response.output_text
     }
 
 
@@ -229,3 +248,4 @@ init_db()
 if __name__ == "__main__":
     # host="0.0.0.0" で外部からのアクセスも受け付ける。ポート8000で待ち受ける
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
