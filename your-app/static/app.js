@@ -646,3 +646,4 @@ document.getElementById("prompt-submit-button").addEventListener("click", async 
     showError("相談処理でエラーが発生しました");
   }
 });
+
